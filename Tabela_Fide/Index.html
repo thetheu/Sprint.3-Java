@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <button class="tablink" onclick="openPage('Home', this, 'red')">Selecione a Baixo o Carro desejado</button>
+
+    <div class="bg-image"> <img src="./img/carrows.jpg" alt="" width="1440px" height="730px"></div>
+
+    <section class="Pai">
+        <div class="bg_text">
+            <select id="select-marcas">
+            </select>
+        </div>
+
+        <table id="tabela-lista">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Titulo</th>
+                    
+                </tr>
+            </thead>
+            <tbody id="tabela-lista-corpo"></tbody>
+
+        </table>
+    </section>
+
+    <script>
+        // pegar a referencia do select
+        const selectMarcas = document.querySelector('#select-marcas');
+        const tabela = document.querySelector('#tabela-lista-corpo')
+        console.log(selectMarcas);
+
+        fetch('https://parallelum.com.br/fipe/api/v1/carros/marcas')
+            .then(resposta => resposta.json())
+            .then(data => preencherSelect(data))
+            .catch(erro => console.log(erro));
+
+        function preencherSelect(listaDeCarros) {
+            listaDeCarros.forEach(element => {
+                var opt = document.createElement('option');
+                opt.value = element.codigo;
+                opt.innerHTML = element.nome;
+                selectMarcas.appendChild(opt);
+            });
+        }
+
+        // quando ele selecionar um item do select
+        selectMarcas.addEventListener('change', function (event) {
+            event.preventDefault();
+
+            console.log(selectMarcas.value)
+            // pegar esse valor
+            // chamar a api
+            // construir a tabela
+            fetch('https://parallelum.com.br/fipe/api/v1/carros/marcas/' + selectMarcas.value + '/modelos')
+                .then(resposta => resposta.json())
+                .then(data => ConstruirTabela(data))
+                .catch(erro => console.log(erro))
+
+            // criar a tabela com a lista
+            function ConstruirTabela(carros) {
+                console.log(carros)
+                console.log(carros.modelos)
+                carros.modelos.forEach(element => {
+                    
+                    const tr = document.createElement('tr')
+                    const td_nome = document.createElement('td')
+
+                    td_nome.textContent = element.nome;
+                    
+                    td.appendChild(td_nome);
+                    tabela.appendChild(tr);
+                });
+            }   
+        });
+        // fazer uma chamada para a api com o valor do select que o usuario sleecionou
+
+
+
+    </script>
+
+</body>
+
+</html>
