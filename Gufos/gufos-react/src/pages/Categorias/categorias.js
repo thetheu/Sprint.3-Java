@@ -10,35 +10,64 @@ import Rodape from '../../components/Rodape';
 
 class Categorias extends Component{
 
-    //Criando o state
-    constructor(){
-        super();
-        this.state = {
-            lista: [
-                // {idCategoria: 1, nome: 'Design'},
-                // {idCategoria: 2, nome: 'Jogos'},
-                // {idCategoria: 3, nome: 'Meetup'}
+  //Criando o state
+  constructor(){
+      super();
+      this.state = {
+          lista: [
+              // {idCategoria: 1, nome: 'Design'},
+              // {idCategoria: 2, nome: 'Jogos'},
+              // {idCategoria: 3, nome: 'Meetup'}
+            ],
 
-            ]
-        }
-    }
+            // nome:""
+      }
+  }
 
-    componentDidMount(){
-        fetch('http://192.168.7.85:5000/api/categorias')
-        .then(Response => Response.json())
-        .then(data => this.setState({lista: data}));
-    }
+  componentDidMount(){
+        this.listarCategorias();
+  }
 
-    adicionaItem =(event) =>{
-        event.preventDefault();
+  listarCategorias = () =>{
+    fetch('http://192.168.7.85:5000/api/categorias')
+    .then(Response => Response.json())
+    .then(data => this.setState({lista: data}));
+  }
 
-        let lista = {idCategoria: 4, nome: 'Nova Categoria'}
-        let lista_state = this.state.lista;
+  // adicionaItem =(event) =>{
+  //       event.preventDefault();
 
-        lista_state.push(lista);
+  //       let lista = {idCategoria: 4, nome: 'Nova Categoria'}
+  //       let lista_state = this.state.lista;
 
-        this.setState({lista: lista_state});
-    }
+  //       lista_state.push(lista);
+
+  //       this.setState({lista: lista_state});
+  // }
+
+
+  cadastrarCategoria = (event) =>{
+    event.preventDefault();
+    
+    fetch('http://192.168.7.85:5000/api/categorias',{
+      method: "POST",
+      body: JSON.stringify({ nome: this.state.nome }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => this.listarCategorias())
+    .catch(erro => console.log(erro));
+  }
+
+
+  //capturar o valor do imput
+  nomeCategoria = (event) =>{
+    //alterar o estado
+    this.setState({nome: event.target.value});
+    console.log(this.state);
+    
+  }
 
     render(){
         return(
@@ -82,18 +111,19 @@ class Categorias extends Component{
             <h2 className="conteudoPrincipal-cadastro-titulo">
               Cadastrar Categoria
             </h2>
-            <form>
+            <form onSubmit={this.cadastrarCategoria}>
               <div className="container">
                 <input
                   type="text"
                   className="className__categoria"
                   id="input__categoria"
                   placeholder="tipo do evento"
+                  value={this.state.nome}
+                  onChange={this.nomeCategoria}
                 />
                 <button
                   id="btn__cadastrar"
                   className="conteudoPrincipal-btn conteudoPrincipal-btn-cadastro"
-                onClick={this.adicionaItem}
                 >
                   Cadastrar
                 </button>

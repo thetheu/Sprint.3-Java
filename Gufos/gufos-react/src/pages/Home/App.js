@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 
+import { Link } from "react-router-dom"
+
 //estilos
 import '../../assets/css/flexbox.css';
 import '../../assets/css/login.css';
@@ -22,7 +24,7 @@ function App() {
             <a>Home</a>
             <a>Eventos</a>
             <a>Contato</a>
-            <a className="cabecalhoPrincipal-nav-login" href="login.html">Login</a>
+            <Link className="cabecalhoPrincipal-nav-login" to="/Login">Login</Link>
           </nav>
         </div>
       </header>
