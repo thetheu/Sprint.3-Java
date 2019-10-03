@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<head>
+
+    <title>InLock - Personagens</title>
+
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <table id="tabela-lista">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Título</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabela-lista-corpo"></tbody>
+    </table>
+
+    <script>
+        const tabela = document.querySelector("#tabela-lista-corpo");
+        const URL = 'https://salty-atoll-57329.herokuapp.com/personagens';
+
+
+        //estabelecer conecxao com a URL
+        fetch(URL)
+            .then(resposta => resposta.json()) // callback(chamada)
+            .then(data => preencherTabela(data))
+            .catch(error => console.log(error));
+
+
+        // metodo = dentro de classe, function = fora do metodo;
+        function preencherTabela(herois) {
+            herois.forEach(element => {
+                let tr = document.createElement('tr');
+                
+                let td_nome = document.createElement('td');
+                let td_lancamento = document.createElement('td');
+                let td_urlImagem = document.createElement('td');
+
+                td_nome.innerText = element.nome;
+                td_lancamento.textContent = element.lancamento;
+
+                td_urlImagem.innerHTML = "<img style='width: 60px;' src='" + element.urlImagem + "'>";
+
+                //appendChild adiciona td no tr;
+                tr.appendChild(td_nome);
+                tr.appendChild(td_lancamento);
+                tr.appendChild(td_urlImagem);
+
+                tabela.appendChild(tr);
+
+            });
+        }
+    </script>
+
+</body>
+</html>
